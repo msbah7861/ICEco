@@ -1,5 +1,29 @@
 /* shared helpers + light drag effect */
 function esc(s){return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+var navToggle=document.querySelector('.nav-toggle');
+var navBar=document.querySelector('header .bar');
+if(navToggle&&navBar){
+  navToggle.addEventListener('click',function(){
+    var open=navToggle.getAttribute('aria-expanded')==='true';
+    navToggle.setAttribute('aria-expanded',String(!open));
+    navToggle.setAttribute('aria-label',open?'Open navigation':'Close navigation');
+    navBar.classList.toggle('nav-open',!open);
+  });
+  navBar.querySelectorAll('nav a').forEach(function(link){
+    link.addEventListener('click',function(){
+      navToggle.setAttribute('aria-expanded','false');
+      navToggle.setAttribute('aria-label','Open navigation');
+      navBar.classList.remove('nav-open');
+    });
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      navToggle.setAttribute('aria-expanded','false');
+      navToggle.setAttribute('aria-label','Open navigation');
+      navBar.classList.remove('nav-open');
+    }
+  });
+}
 /* light drag: popsicles can be pulled a little and spring back */
 function dragify(sel){
   document.querySelectorAll(sel).forEach(function(el){
